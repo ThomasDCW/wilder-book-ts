@@ -1,24 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import AddWilder from "./components/AddWilder";
+import Wilder, { WilderProps } from "./components/Wilder";
 
 function App() {
+  const [wilders, setWilders] = useState<WilderProps[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const wilders = await axios.get("http://localhost:8000/api/wilder");
+      setWilders(
+        wilders.data.map((wilder: any) => ({
+          id: wilder.id,
+          name: wilder.name,
+          skills: wilder.grades.map((grade: any) => ({
+            vote: grade.grade,
+            title: grade.skill.name,
+          })),
+        }))
+      );
+    };
+    fetchData();
+  }, []);
+  console.log(wilders);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <div className="container">
+          <h1>Wilders Book</h1>
+        </div>
       </header>
+      <main className="container">
+        <h2>Wilders</h2>
+        <AddWilder />
+        {/* <AddSkill names={wilders} /> */}
+        <section className="card-row">
+          {wilders?.map((wilderData, key) => {
+            return (
+              <Wilder
+                key={key}
+                id={wilderData.id}
+                name={wilderData.name}
+                skills={wilderData.skills}
+                city={wilderData.city}
+              />
+            );
+          })}
+        </section>
+      </main>
+      <footer>
+        <div className="container">
+          <p>&copy; 2022 Wild Code School</p>
+        </div>
+      </footer>
     </div>
   );
 }

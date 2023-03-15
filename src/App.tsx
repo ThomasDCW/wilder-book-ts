@@ -4,17 +4,35 @@ import { useState, useEffect } from "react";
 import AddWilder from "./components/AddWilder";
 import Wilder, { WilderProps } from "./components/Wilder";
 
+interface SkillAPI {
+  id: number;
+  name: string;
+}
+
+interface GradeAPI {
+  grade: number;
+  skill: SkillAPI;
+}
+
+interface WilderAPI {
+  name: string;
+  id: number;
+  grades: GradeAPI[];
+}
+
 function App() {
   const [wilders, setWilders] = useState<WilderProps[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const wilders = await axios.get("http://localhost:8000/api/wilder");
+      const wildersAPI = await axios.get("http://localhost:8000/api/wilder");
+      console.log(wildersAPI.data);
+
       setWilders(
-        wilders.data.map((wilder: any) => ({
+        wildersAPI.data.map((wilder: WilderAPI) => ({
           id: wilder.id,
           name: wilder.name,
-          skills: wilder.grades.map((grade: any) => ({
+          skills: wilder.grades.map((grade) => ({
             vote: grade.grade,
             title: grade.skill.name,
           })),
@@ -23,7 +41,7 @@ function App() {
     };
     fetchData();
   }, []);
-  console.log(wilders);
+  // console.log(wilders);
 
   return (
     <div>

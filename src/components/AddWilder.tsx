@@ -2,8 +2,8 @@ import axios from "axios";
 import { useState } from "react";
 
 export default function AddWilder() {
-  const [name, setName] = useState("");
-  const [city, setCity] = useState("");
+  const [name, setName] = useState<string>("");
+  const [city, setCity] = useState<string>("");
   return (
     <form
       className="form"

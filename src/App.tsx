@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import AddWilder from "./components/AddWilder";
 import Wilder, { WilderProps } from "./components/Wilder";
 import AddSkillWithGrade from "./components/AddSkillWithGrade";
+import AddSkill from "./components/AddSkill";
 
 export interface SkillAPI {
   id: number;
@@ -56,6 +57,7 @@ function App() {
         <div className="addform">
           {" "}
           <AddWilder />
+          <AddSkill />
           <AddSkillWithGrade wilders={wilders} />
         </div>
 

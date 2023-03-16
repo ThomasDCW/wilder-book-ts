@@ -16,12 +16,14 @@ export default function AddWilder() {
     >
       <label>Name</label>
       <input
+        placeholder="toto, tata, tutu..."
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
       <label>City</label>
       <input
+        placeholder="Lille, Paris, Lyon..."
         type="text"
         value={city}
         onChange={(e) => setCity(e.target.value)}

@@ -10,17 +10,13 @@ interface SelectWilders {
 export default function AddSkillWithGrade({ wilders }: SelectWilders) {
   const [wilder, setWilder] = useState<string>("");
   const [skill, setSkill] = useState<string>("");
-  const [skills, setSKills] = useState<SkillAPI[]>([]);
+  const [skills, setSkills] = useState<SkillAPI[]>([]);
   const [grade, setGrade] = useState(0);
-
-  console.log(wilder);
-  console.log(skill);
-  console.log(skills);
 
   useEffect(() => {
     const fetchData = async () => {
       const wildersSkill = await axios.get("http://localhost:8000/api/skill");
-      setSKills(wildersSkill.data);
+      setSkills(wildersSkill.data);
     };
     fetchData();
   }, []);
@@ -31,8 +27,8 @@ export default function AddSkillWithGrade({ wilders }: SelectWilders) {
         className="form"
         onSubmit={() => {
           axios.post("http://localhost:8000/api/grade", {
-            wilderName: wilder,
-            skillName: skill,
+            wilderId: wilder,
+            skillId: skill,
             grade: grade,
           });
         }}
@@ -41,14 +37,18 @@ export default function AddSkillWithGrade({ wilders }: SelectWilders) {
         <select name="pets" onChange={(e) => setWilder(e.target.value)}>
           <option value="">--Select a wilder--</option>
           {wilders.map((wilder, key: Key) => (
-            <option key={key}>{wilder.name}</option>
+            <option key={key} value={wilder.id}>
+              {wilder.name}, ({wilder.city})
+            </option>
           ))}
         </select>
         <label>Select a Skill : </label>
         <select name="pets" onChange={(e) => setSkill(e.target.value)}>
           <option value="">--Select a skill--</option>
           {skills.map((skill, key) => (
-            <option key={key}>{skill.name}</option>
+            <option key={key} value={skill.id}>
+              {skill.name}
+            </option>
           ))}
         </select>
         <label>Add a grade : </label>

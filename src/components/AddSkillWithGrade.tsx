@@ -45,7 +45,7 @@ export default function AddSkillWithGrade({ wilders }: SelectWilders) {
         <label>Select a Skill : </label>
         <select name="pets" onChange={(e) => setSkill(e.target.value)}>
           <option value="">--Select a skill--</option>
-          {skills.map((skill, key) => (
+          {skills.map((skill, key: Key) => (
             <option key={key} value={skill.id}>
               {skill.name}
             </option>

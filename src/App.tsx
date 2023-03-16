@@ -15,8 +15,9 @@ interface GradeAPI {
 }
 
 interface WilderAPI {
-  name: string;
   id: number;
+  city: string;
+  name: string;
   grades: GradeAPI[];
 }
 
@@ -31,6 +32,7 @@ function App() {
       setWilders(
         wildersAPI.data.map((wilder: WilderAPI) => ({
           id: wilder.id,
+          city: wilder.city,
           name: wilder.name,
           skills: wilder.grades.map((grade) => ({
             vote: grade.grade,

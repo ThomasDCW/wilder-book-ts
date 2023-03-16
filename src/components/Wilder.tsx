@@ -28,7 +28,7 @@ export default function Wilder({ name, id, skills, city }: WilderProps) {
         })}
       </ul>
       <form
-        onSubmit={(e) => {
+        onSubmit={() => {
           axios.delete(`http://localhost:8000/api/wilder/${id}`);
         }}
       >

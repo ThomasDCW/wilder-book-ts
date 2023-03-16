@@ -11,7 +11,7 @@ export default function AddSkillWithGrade({ wilders }: SelectWilders) {
   const [wilder, setWilder] = useState<string>("");
   const [skill, setSkill] = useState<string>("");
   const [skills, setSkills] = useState<SkillAPI[]>([]);
-  const [grade, setGrade] = useState(0);
+  const [grade, setGrade] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {

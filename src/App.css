@@ -36,6 +36,9 @@ p {
   margin-right: auto;
   padding: 24px;
 }
+.addform {
+  display: flex;
+}
 
 header {
   background-color: #f76c6c;

@@ -3,8 +3,9 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import AddWilder from "./components/AddWilder";
 import Wilder, { WilderProps } from "./components/Wilder";
+import AddSkillWithGrade from "./components/AddSkillWithGrade";
 
-interface SkillAPI {
+export interface SkillAPI {
   id: number;
   name: string;
 }
@@ -27,7 +28,6 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       const wildersAPI = await axios.get("http://localhost:8000/api/wilder");
-      console.log(wildersAPI.data);
 
       setWilders(
         wildersAPI.data.map((wilder: WilderAPI) => ({
@@ -43,7 +43,6 @@ function App() {
     };
     fetchData();
   }, []);
-  // console.log(wilders);
 
   return (
     <div>
@@ -54,8 +53,12 @@ function App() {
       </header>
       <main className="container">
         <h2>Wilders</h2>
-        <AddWilder />
-        {/* <AddSkill names={wilders} /> */}
+        <div className="addform">
+          {" "}
+          <AddWilder />
+          <AddSkillWithGrade wilders={wilders} />
+        </div>
+
         <section className="card-row">
           {wilders?.map((wilderData, key) => {
             return (

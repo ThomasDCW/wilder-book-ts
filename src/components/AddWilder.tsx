@@ -9,20 +9,26 @@ export default function AddWilder({
 }) {
   const [name, setName] = useState<string>("");
   const [city, setCity] = useState<string>("");
+
   return (
     <form
       className="form"
       onSubmit={async (e) => {
         try {
           e.preventDefault();
-          await axios.post("http://localhost:8000/api/wilder", {
+          const result = await axios.post("http://localhost:8000/api/wilder", {
             name: name,
             city: city,
           });
           setUpdate(new Date().getTime());
-          toast.success("Wilder ajouté");
+          toast.success(
+            `Le wilder ${result.data.name} de ${result.data.city} a était ajouté`
+          );
+          setName("");
+          setCity("");
         } catch (error) {
-          toast.error("Quelque chose s'est mal passé");
+          toast.error("Echec critique!");
+          console.log(error);
         }
       }}
     >

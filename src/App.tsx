@@ -24,6 +24,7 @@ interface WilderAPI {
 }
 
 function App() {
+  const [update, setUpdate] = useState(new Date().getTime());
   const [wilders, setWilders] = useState<WilderProps[]>([]);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ function App() {
       );
     };
     fetchData();
-  }, []);
+  }, [update]);
 
   return (
     <div>
@@ -56,7 +57,7 @@ function App() {
         <h2>Wilders</h2>
         <div className="addform">
           {" "}
-          <AddWilder />
+          <AddWilder setUpdate={setUpdate} />
           <AddSkill />
           <AddSkillWithGrade wilders={wilders} />
         </div>

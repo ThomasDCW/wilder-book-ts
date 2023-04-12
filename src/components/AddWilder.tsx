@@ -1,14 +1,24 @@
-import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { gql, useMutation } from "@apollo/client";
 
-export default function AddWilder({
-  setUpdate,
-}: {
-  setUpdate: React.Dispatch<React.SetStateAction<number>>;
-}) {
+const CREATE_WILDER = gql`
+  mutation CreateWilder($name: String!, $city: String!) {
+    createWilder(name: $name, city: $city) {
+      name
+      city
+    }
+  }
+`;
+
+export default function AddWilder() {
+  const [CreateWilder, { loading, error }] = useMutation(CREATE_WILDER);
+
   const [name, setName] = useState<string>("");
   const [city, setCity] = useState<string>("");
+
+  if (loading) return <p>"Submitting..."</p>;
+  if (error) return <p>Submission error!</p>;
 
   return (
     <form
@@ -16,14 +26,8 @@ export default function AddWilder({
       onSubmit={async (e) => {
         try {
           e.preventDefault();
-          const result = await axios.post("http://localhost:8000/api/wilder", {
-            name: name,
-            city: city,
-          });
-          setUpdate(new Date().getTime());
-          toast.success(
-            `Le wilder ${result.data.name} de ${result.data.city} a était ajouté`
-          );
+          CreateWilder({ variables: { name: name, city: city } });
+          toast.success(`Le wilder ${name} de ${city} a était ajouté`);
           setName("");
           setCity("");
         } catch (error) {

@@ -1,7 +1,7 @@
 import "./App.css";
 import { useQuery, gql } from "@apollo/client";
 import Wilder, { WilderProps } from "./components/Wilder";
-// import AddWilder from "./components/AddWilder";
+import AddWilder from "./components/AddWilder";
 // import AddSkillWithGrade from "./components/AddSkillWithGrade";
 // import AddSkill from "./components/AddSkill";
 
@@ -65,9 +65,8 @@ function App() {
       <main className="container">
         <h2>Wilders</h2>
         <div className="addform">
-          {" "}
-          {/* <AddWilder setUpdate={setUpdate} />
-          <AddSkill />
+          <AddWilder />
+          {/* <AddSkill />
           <AddSkillWithGrade wilders={wilders} /> */}
         </div>
 

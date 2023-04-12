@@ -2,6 +2,7 @@ import "./App.css";
 import { useQuery, gql } from "@apollo/client";
 import Wilder, { WilderProps } from "./components/Wilder";
 import AddWilder from "./components/AddWilder";
+
 // import AddSkillWithGrade from "./components/AddSkillWithGrade";
 // import AddSkill from "./components/AddSkill";
 
@@ -27,6 +28,7 @@ const GET_WILDERS = gql`
     wilders {
       id
       name
+      city
       grades {
         grade
         skill {
@@ -39,6 +41,7 @@ const GET_WILDERS = gql`
 
 const formatWildersFromApi = (wilders: WilderAPI[]): WilderProps[] =>
   wilders.map((wilder) => {
+    console.log(wilders);
     return {
       id: wilder.id,
       name: wilder.name,

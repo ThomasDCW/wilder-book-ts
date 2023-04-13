@@ -13,13 +13,12 @@ const CREATE_WILDER = gql`
 `;
 
 export default function AddWilder() {
-  const [CreateWilder, { loading, error }] = useMutation(CREATE_WILDER);
+  const [CreateWilder, { error }] = useMutation(CREATE_WILDER);
 
   const [name, setName] = useState<string>("");
   const [city, setCity] = useState<string>("");
 
-  if (loading) return <p>"Submitting..."</p>;
-  if (error) return <p>Submission error!</p>;
+  if (error) return <p>{error.message}</p>;
 
   return (
     <form
@@ -27,16 +26,18 @@ export default function AddWilder() {
       onSubmit={async (e) => {
         try {
           e.preventDefault();
+          if (!name || !city) {
+            throw new Error("Les champs ne peuvent pas être vides.");
+          }
           CreateWilder({
             variables: { name: name, city: city },
             refetchQueries: [GET_WILDERS],
           });
-          toast.success(`Le wilder ${name} de ${city} a était ajouté`);
+          toast.success(`Le wilder ${name} de ${city} a été ajouté`);
           setName("");
           setCity("");
-        } catch (error) {
-          toast.error("Echec critique!");
-          console.log(error);
+        } catch (error: any) {
+          toast.error(error.message);
         }
       }}
     >

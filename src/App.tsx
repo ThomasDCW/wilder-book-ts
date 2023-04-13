@@ -77,7 +77,6 @@ function App() {
 
         <section className="card-row">
           {wilders?.map((wilderData, key) => {
-            console.log(wilders);
             return (
               <Wilder
                 key={key}

@@ -35,6 +35,7 @@ export const GET_WILDERS = gql`
       grades {
         grade
         skill {
+          id
           name
         }
       }
@@ -50,7 +51,7 @@ const formatWildersFromApi = (wilders: WilderAPI[]): WilderProps[] =>
       name: wilder.name,
       city: wilder.city,
       skills: wilder.grades.map((grade) => {
-        return { vote: grade.grade, title: grade.skill.name };
+        return { vote: grade.grade, name: grade?.skill.name };
       }),
     };
   });

@@ -38,7 +38,7 @@ export default function Wilder({ name, id, skills, city }: WilderProps) {
       <h4>Wild Skills</h4>
       <ul className="skills">
         {skills.map((skill, key) => {
-          return <Skill key={key} title={skill.title} vote={skill.vote} />;
+          return <Skill key={key} name={skill.name} vote={skill.vote} />;
         })}
       </ul>
       <input

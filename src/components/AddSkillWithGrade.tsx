@@ -1,8 +1,7 @@
-import { Key, useEffect, useState } from "react";
-import axios from "axios";
-import { SkillAPI } from "../App";
+import { Key, useState } from "react";
+import { GET_WILDERS, SkillAPI } from "../App";
 import { WilderProps } from "./Wilder";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
 interface SelectWilders {
   wilders: WilderProps[];
@@ -17,12 +16,23 @@ export const GET_SKILLS = gql`
   }
 `;
 
+const ADD_GRADE = gql`
+  mutation AddGrade($grade: Float!, $skillId: Float!, $wilderId: Float!) {
+    addGrade(grade: $grade, skillId: $skillId, wilderId: $wilderId) {
+      grade
+      skillId
+      wilderId
+    }
+  }
+`;
+
 export default function AddSkillWithGrade({ wilders }: SelectWilders) {
-  const [wilder, setWilder] = useState<string>("");
-  const [skill, setSkill] = useState<string>("");
+  const [wilder, setWilder] = useState<number>(0);
+  const [skill, setSkill] = useState<number>(0);
   const [grade, setGrade] = useState<number>(0);
 
   const { loading, error, data } = useQuery(GET_SKILLS);
+  const [AddGrade] = useMutation(ADD_GRADE);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
@@ -32,16 +42,24 @@ export default function AddSkillWithGrade({ wilders }: SelectWilders) {
     <div>
       <form
         className="form"
-        onSubmit={() => {
-          axios.post("http://localhost:8000/api/grade", {
-            wilderId: wilder,
-            skillId: skill,
-            grade: grade,
+        onSubmit={(e) => {
+          e.preventDefault();
+          AddGrade({
+            variables: {
+              grade,
+              wilderId: wilder,
+              skillId: skill,
+            },
+            refetchQueries: [GET_WILDERS],
           });
+          setGrade(0);
         }}
       >
         <label>Select a Wilder : </label>
-        <select name="pets" onChange={(e) => setWilder(e.target.value)}>
+        <select
+          name="pets"
+          onChange={(e) => setWilder(parseInt(e.target.value))}
+        >
           <option value="">--Select a wilder--</option>
           {wilders?.map((wilder, key: Key) => (
             <option key={key} value={wilder.id}>
@@ -50,7 +68,10 @@ export default function AddSkillWithGrade({ wilders }: SelectWilders) {
           ))}
         </select>
         <label>Select a Skill : </label>
-        <select name="pets" onChange={(e) => setSkill(e.target.value)}>
+        <select
+          name="pets"
+          onChange={(e) => setSkill(parseInt(e.target.value))}
+        >
           <option value="">--Select a skill--</option>
           {skills?.map((skill, key: Key) => (
             <option key={key} value={skill.id}>

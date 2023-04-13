@@ -1,12 +1,12 @@
 export interface SkillProps {
-  title: string;
+  name: string;
   vote: number;
 }
 
-export default function Skill({ title, vote }: SkillProps) {
+export default function Skill({ name, vote }: SkillProps) {
   return (
     <li>
-      {title}
+      {name}
       <span className="votes">{vote}</span>
     </li>
   );

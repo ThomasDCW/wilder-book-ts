@@ -4,6 +4,7 @@ import Wilder, { WilderProps } from "./components/Wilder";
 import AddWilder from "./components/AddWilder";
 import AddSkill from "./components/AddSkill";
 import AddSkillWithGrade from "./components/AddSkillWithGrade";
+import { Key } from "react";
 
 // import AddSkillWithGrade from "./components/AddSkillWithGrade";
 // import AddSkill from "./components/AddSkill";
@@ -76,7 +77,7 @@ function App() {
         </div>
 
         <section className="card-row">
-          {wilders?.map((wilderData, key) => {
+          {wilders?.map((wilderData, key: Key) => {
             return (
               <Wilder
                 key={key}

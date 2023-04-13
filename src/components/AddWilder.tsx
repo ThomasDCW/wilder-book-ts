@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { gql, useMutation } from "@apollo/client";
+import { GET_WILDERS } from "../App";
 
 const CREATE_WILDER = gql`
   mutation CreateWilder($name: String!, $city: String!) {
@@ -26,7 +27,10 @@ export default function AddWilder() {
       onSubmit={async (e) => {
         try {
           e.preventDefault();
-          CreateWilder({ variables: { name: name, city: city } });
+          CreateWilder({
+            variables: { name: name, city: city },
+            refetchQueries: [GET_WILDERS],
+          });
           toast.success(`Le wilder ${name} de ${city} a était ajouté`);
           setName("");
           setCity("");

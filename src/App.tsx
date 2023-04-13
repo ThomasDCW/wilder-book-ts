@@ -2,6 +2,8 @@ import "./App.css";
 import { useQuery, gql } from "@apollo/client";
 import Wilder, { WilderProps } from "./components/Wilder";
 import AddWilder from "./components/AddWilder";
+import AddSkill from "./components/AddSkill";
+import AddSkillWithGrade from "./components/AddSkillWithGrade";
 
 // import AddSkillWithGrade from "./components/AddSkillWithGrade";
 // import AddSkill from "./components/AddSkill";
@@ -23,7 +25,7 @@ interface WilderAPI {
   grades: GradeAPI[];
 }
 
-const GET_WILDERS = gql`
+export const GET_WILDERS = gql`
   query GetWilders {
     wilders {
       id
@@ -69,12 +71,13 @@ function App() {
         <h2>Wilders</h2>
         <div className="addform">
           <AddWilder />
-          {/* <AddSkill />
-          <AddSkillWithGrade wilders={wilders} /> */}
+          <AddSkill />
+          <AddSkillWithGrade wilders={wilders} />
         </div>
 
         <section className="card-row">
           {wilders?.map((wilderData, key) => {
+            console.log(wilders);
             return (
               <Wilder
                 key={key}

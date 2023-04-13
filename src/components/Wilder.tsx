@@ -1,6 +1,7 @@
+import { gql, useMutation } from "@apollo/client";
 import blank_profile from "../assets/blank_profile.png";
 import Skill, { SkillProps } from "./Skill";
-import axios from "axios";
+import { GET_WILDERS } from "../App";
 
 export interface WilderProps {
   name: string;
@@ -9,7 +10,20 @@ export interface WilderProps {
   city: string;
 }
 
+const DELETE_WILDER = gql`
+  mutation DeletedWilder($deletedWilderId: Float!) {
+    deletedWilder(id: $deletedWilderId) {
+      raw
+      affected
+    }
+  }
+`;
+
 export default function Wilder({ name, id, skills, city }: WilderProps) {
+  const [DeleteWilder, { loading, error }] = useMutation(DELETE_WILDER);
+  if (loading) return <p>"Submitting..."</p>;
+  if (error) return <p>Submission error!</p>;
+
   return (
     <article className="card">
       <img src={blank_profile} alt="Jane Doe Profile" />
@@ -27,13 +41,17 @@ export default function Wilder({ name, id, skills, city }: WilderProps) {
           return <Skill key={key} title={skill.title} vote={skill.vote} />;
         })}
       </ul>
-      <form
-        onSubmit={() => {
-          axios.delete(`http://localhost:8000/api/wilder/${id}`);
+      <input
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          DeleteWilder({
+            variables: { deletedWilderId: id },
+            refetchQueries: [GET_WILDERS],
+          });
         }}
-      >
-        <button type="submit">Delete</button>
-      </form>
+        value="Delete"
+      />
     </article>
   );
 }

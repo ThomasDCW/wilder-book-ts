@@ -1,10 +1,12 @@
 import "./App.css";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import AddWilder from "./components/AddWilder";
+import { useQuery, gql } from "@apollo/client";
 import Wilder, { WilderProps } from "./components/Wilder";
-import AddSkillWithGrade from "./components/AddSkillWithGrade";
+import AddWilder from "./components/AddWilder";
 import AddSkill from "./components/AddSkill";
+import AddSkillWithGrade from "./components/AddSkillWithGrade";
+
+// import AddSkillWithGrade from "./components/AddSkillWithGrade";
+// import AddSkill from "./components/AddSkill";
 
 export interface SkillAPI {
   id: number;
@@ -23,28 +25,40 @@ interface WilderAPI {
   grades: GradeAPI[];
 }
 
-function App() {
-  const [update, setUpdate] = useState(new Date().getTime());
-  const [wilders, setWilders] = useState<WilderProps[]>([]);
+export const GET_WILDERS = gql`
+  query GetWilders {
+    wilders {
+      id
+      name
+      city
+      grades {
+        grade
+        skill {
+          name
+        }
+      }
+    }
+  }
+`;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const wildersAPI = await axios.get("http://localhost:8000/api/wilder");
-
-      setWilders(
-        wildersAPI.data.map((wilder: WilderAPI) => ({
-          id: wilder.id,
-          city: wilder.city,
-          name: wilder.name,
-          skills: wilder.grades.map((grade) => ({
-            vote: grade.grade,
-            title: grade.skill.name,
-          })),
-        }))
-      );
+const formatWildersFromApi = (wilders: WilderAPI[]): WilderProps[] =>
+  wilders.map((wilder) => {
+    console.log(wilders);
+    return {
+      id: wilder.id,
+      name: wilder.name,
+      city: wilder.city,
+      skills: wilder.grades.map((grade) => {
+        return { vote: grade.grade, title: grade.skill.name };
+      }),
     };
-    fetchData();
-  }, [update]);
+  });
+
+function App() {
+  const { loading, error, data } = useQuery(GET_WILDERS);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
+  const wilders = formatWildersFromApi(data.wilders);
 
   return (
     <div>
@@ -56,14 +70,14 @@ function App() {
       <main className="container">
         <h2>Wilders</h2>
         <div className="addform">
-          {" "}
-          <AddWilder setUpdate={setUpdate} />
+          <AddWilder />
           <AddSkill />
           <AddSkillWithGrade wilders={wilders} />
         </div>
 
         <section className="card-row">
           {wilders?.map((wilderData, key) => {
+            console.log(wilders);
             return (
               <Wilder
                 key={key}
